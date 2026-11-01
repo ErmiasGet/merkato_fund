@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: merkato_fund
+      POSTGRES_USER: merkato
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-this-local-password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - merkato_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U merkato -d merkato_fund"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  merkato_postgres:
