@@ -46,3 +46,10 @@ export function isAllowedOrigin(origin, configuredOrigins = allowedOrigins()) {
     return false
   }
 }
+
+const VERCEL_APP_ORIGIN = /^https:\/\/merkato-?fund[^.]*\.vercel\.app$/i
+
+export function isTrustedRequestOrigin(origin, configuredOrigins = allowedOrigins()) {
+  if (isAllowedOrigin(origin, configuredOrigins)) return true
+  return Boolean(origin && process.env.NODE_ENV === 'production' && VERCEL_APP_ORIGIN.test(origin))
+}

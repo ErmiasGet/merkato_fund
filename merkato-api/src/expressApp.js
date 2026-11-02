@@ -4,7 +4,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import { rateLimit } from 'express-rate-limit'
 import { pool } from './db/pool.js'
-import { allowedOrigins, isAllowedOrigin } from './lib/security.js'
+import { allowedOrigins, isAllowedOrigin, isTrustedRequestOrigin } from './lib/security.js'
 import { authRouter } from './routes/auth.js'
 import { cmsRouter } from './routes/cms.js'
 import { translateRouter } from './routes/translate.js'
@@ -21,7 +21,7 @@ app.use(cookieParser())
 app.use((req, res, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
     const origin = req.get('origin')
-    if (!isAllowedOrigin(origin, origins)) return res.status(403).json({ error: 'Request origin is not allowed.' })
+    if (!isTrustedRequestOrigin(origin, origins)) return res.status(403).json({ error: 'Request origin is not allowed.' })
   }
   next()
 })
