@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AdminRecoveryPage } from './components/layout/AdminRecoveryPage'
 import { LoginScreen } from './components/layout/LoginScreen'
 import { PageRouter } from './components/layout/PageRouter'
@@ -9,38 +9,20 @@ import type { Page } from './types/admin'
 import { apiRequest, type AuthUser } from './lib/api'
 import { CmsProvider } from './lib/cms'
 
-const AUTO_LOGIN_EMAIL = import.meta.env.VITE_AUTO_LOGIN_EMAIL || 'admin@merkatofund.et'
-const AUTO_LOGIN_PASSWORD = import.meta.env.VITE_AUTO_LOGIN_PASSWORD || 'MerkatoFund@Admin2026!'
-
 type PendingDialog = { title: string; text: string; onConfirm?: () => void | Promise<void> }
 
 export default function App() {
   const [user, setUser] = useState<AuthUser | null>(null)
-  const [authChecked, setAuthChecked] = useState(false)
   const [page, setPage] = useState<Page>('Dashboard')
   const [editingContentId, setEditingContentId] = useState<string | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [pendingDialog, setPendingDialog] = useState<PendingDialog | null>(null)
 
-  useEffect(() => {
-    const autoLogin = () => apiRequest<{ user: AuthUser }>('/auth/login', {
-      method: 'POST',
-      body: { email: AUTO_LOGIN_EMAIL, password: AUTO_LOGIN_PASSWORD },
-    }).then(({ user: currentUser }) => setUser(currentUser))
-
-    apiRequest<{ user: AuthUser }>('/auth/me')
-      .then(({ user: currentUser }) => currentUser.role === 'admin' ? setUser(currentUser) : autoLogin())
-      .catch(autoLogin)
-      .catch(() => setUser(null))
-      .finally(() => setAuthChecked(true))
-  }, [])
-
   if (window.location.pathname === '/forgot-password' || window.location.pathname === '/reset-password') {
     return <AdminRecoveryPage reset={window.location.pathname === '/reset-password'} />
   }
 
-  if (!authChecked) return <div className="auth-loading" role="status">Checking secure session…</div>
   if (!user) return <LoginScreen onLogin={setUser} />
 
   const logout = async () => {
