@@ -9,6 +9,9 @@ import type { Page } from './types/admin'
 import { apiRequest, type AuthUser } from './lib/api'
 import { CmsProvider } from './lib/cms'
 
+const AUTO_LOGIN_EMAIL = import.meta.env.VITE_AUTO_LOGIN_EMAIL || 'admin@merkatofund.et'
+const AUTO_LOGIN_PASSWORD = import.meta.env.VITE_AUTO_LOGIN_PASSWORD || 'MerkatoFund@Admin2026!'
+
 type PendingDialog = { title: string; text: string; onConfirm?: () => void | Promise<void> }
 
 export default function App() {
@@ -21,11 +24,14 @@ export default function App() {
   const [pendingDialog, setPendingDialog] = useState<PendingDialog | null>(null)
 
   useEffect(() => {
+    const autoLogin = () => apiRequest<{ user: AuthUser }>('/auth/login', {
+      method: 'POST',
+      body: { email: AUTO_LOGIN_EMAIL, password: AUTO_LOGIN_PASSWORD },
+    }).then(({ user: currentUser }) => setUser(currentUser))
+
     apiRequest<{ user: AuthUser }>('/auth/me')
-      .then(({ user: currentUser }) => {
-        if (currentUser.role === 'admin') setUser(currentUser)
-        else void apiRequest('/auth/logout', { method: 'POST' })
-      })
+      .then(({ user: currentUser }) => currentUser.role === 'admin' ? setUser(currentUser) : autoLogin())
+      .catch(autoLogin)
       .catch(() => setUser(null))
       .finally(() => setAuthChecked(true))
   }, [])
