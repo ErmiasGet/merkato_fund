@@ -8,25 +8,30 @@ export function hashToken(token) {
   return createHash('sha256').update(token).digest('hex')
 }
 
+const BUILTIN_PRODUCTION_ORIGINS = [
+  'https://merkato-fund-mjrx.vercel.app',
+  'https://merkato-fund-ccbi.vercel.app',
+]
+
 export function cookieOptions(maxAge) {
   return {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production' || process.env.COOKIE_SECURE === 'true',
-    sameSite: process.env.COOKIE_SAME_SITE || 'lax',
+    sameSite: process.env.COOKIE_SAME_SITE || (process.env.NODE_ENV === 'production' ? 'none' : 'lax'),
     path: '/',
     maxAge,
   }
 }
 
 export function allowedOrigins() {
-  const configuredOrigins = (process.env.WEB_ORIGINS || 'http://localhost:5173,http://localhost:5174')
+  const configuredOrigins = (process.env.WEB_ORIGINS || '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean)
-  const localDevOrigins = process.env.NODE_ENV === 'production'
-    ? []
-    : ['http://127.0.0.1:5173', 'http://127.0.0.1:5174']
-  return [...new Set([...configuredOrigins, ...localDevOrigins])]
+  const builtinOrigins = process.env.NODE_ENV === 'production'
+    ? BUILTIN_PRODUCTION_ORIGINS
+    : ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174']
+  return [...new Set([...configuredOrigins, ...builtinOrigins])]
 }
 
 export function isAllowedOrigin(origin, configuredOrigins = allowedOrigins()) {
