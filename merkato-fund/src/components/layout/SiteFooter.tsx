@@ -10,6 +10,8 @@ export function SiteFooter() {
   const { settings } = useSiteData()
   const { t } = useLanguage()
   const contact = settings.contact && typeof settings.contact === 'object' ? settings.contact as Record<string, string> : {}
+  const onHomePage = window.location.pathname === '/' || window.location.pathname === ''
+  const homePrefix = onHomePage ? '' : '/'
 
   return <>
     <section className="social-connect" id="connect">
@@ -25,9 +27,9 @@ export function SiteFooter() {
     <footer className="footer">
       <div className="container">
         <div className="footer-main">
-          <div className="footer-brand"><Logo light/><p>{t('A financial opportunity platform built around clarity, accountability, and responsible participation.')}</p></div>
-          <nav className="footer-column" aria-label={t('Explore Merkato Fund')}><h4>{t('Explore')}</h4><a href="#about-us">{t('About Merkato Fund')}</a><a href="#how-it-works">{t('How It Works')}</a><a href="#transparency">{t('Financial Terms')}</a><a href="#faqs">{t('Frequently Asked Questions')}</a></nav>
-          <nav className="footer-column" aria-label={t('Resources')}><h4>{t('Resources')}</h4><a href="#media-center">{t('Media Center')}</a><a href="#privacy">{t('Privacy Policy')}</a><a href="#terms">{t('Terms & Conditions')}</a><a href="#risk">{t('Risk Disclosure')}</a></nav>
+          <div className="footer-brand"><Logo light href={onHomePage ? '#home' : '/'}/><p>{t('A financial opportunity platform built around clarity, accountability, and responsible participation.')}</p></div>
+          <nav className="footer-column" aria-label={t('Explore Merkato Fund')}><h4>{t('Explore')}</h4><a href="/about">{t('Discover Merkato Fund')}</a><a href={`${homePrefix}#about-us`}>{t('About Merkato Fund')}</a><a href={`${homePrefix}#how-it-works`}>{t('How It Works')}</a><a href={`${homePrefix}#transparency`}>{t('Financial Terms')}</a><a href={`${homePrefix}#faqs`}>{t('Frequently Asked Questions')}</a></nav>
+          <nav className="footer-column" aria-label={t('Resources')}><h4>{t('Resources')}</h4><a href={`${homePrefix}#media-center`}>{t('Media Center')}</a><a href={`${homePrefix}#privacy`}>{t('Privacy Policy')}</a><a href={`${homePrefix}#terms`}>{t('Terms & Conditions')}</a><a href={`${homePrefix}#risk`}>{t('Risk Disclosure')}</a></nav>
           <div className="footer-column footer-contact"><h4>{t('Contact')}</h4><span>{contact.address || t('Office address to be confirmed')}</span><span>{contact.phone ? `${t('Phone:')} ${contact.phone}` : t('Phone: To be confirmed')}</span>{contact.email ? <a href={`mailto:${contact.email}`}>{contact.email}</a> : <span>{t('Email: To be confirmed')}</span>}<LanguageSelector compact /></div>
         </div>
         <div className="footer-disclaimer"><Icon name="shield"/><p>{t('Financial participation involves obligations and risks. Review the official program terms and verify the organization\'s authorization before committing funds.')}</p></div>

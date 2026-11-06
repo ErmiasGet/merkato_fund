@@ -47,6 +47,7 @@ export function AboutSection() {
     <div className="about-copy">
       <p className="eyebrow">{t('About Merkato Fund')}</p><h2>{t(aboutSetting.title || aboutContent?.title || 'A Clearer Approach to Financial Opportunity')}</h2><p className="lead">{t(aboutSetting.body || aboutContent?.body || aboutContent?.summary || 'We believe financial participation should begin with understanding—not urgency. Every obligation, condition, and risk should be communicated clearly.')}</p>
       <div className="principles">{principles.map(([title, text]) => <div key={title}><h3>{t(title)}</h3><p>{t(text)}</p></div>)}</div>
+      <a className="button button-dark about-read-more" href="/about">{t('Read More About Merkato Fund')} <Icon name="arrow"/></a>
     </div>
   </section>
 }

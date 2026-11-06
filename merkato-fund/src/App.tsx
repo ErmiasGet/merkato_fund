@@ -8,6 +8,7 @@ import { HeroSection } from './components/sections/HeroSection'
 import { OpportunitySection, ProcessSection, TransparencySection } from './components/sections/FundSections'
 import { VideoModal } from './components/ui/VideoModal'
 import AccountPage from './components/auth/AccountPage'
+import { AboutMerkatoFundPage } from './components/pages/AboutMerkatoFundPage'
 import { SiteDataProvider } from './lib/siteData'
 import { LocaleProvider } from './lib/localeProvider'
 import { useLanguage } from './lib/useLanguage'
@@ -16,9 +17,14 @@ import { SocialLinks } from './components/ui/SocialLinks'
 function AppContent() {
   const [videoOpen, setVideoOpen] = useState(false)
   const { language, switching, error, t } = useLanguage()
+  const path = window.location.pathname.replace(/\/+$/, '') || '/'
 
-  if (['/login', '/signup', '/forgot-password', '/reset-password'].includes(window.location.pathname)) {
+  if (['/login', '/signup', '/forgot-password', '/reset-password'].includes(path)) {
     return <><AccountPage />{switching && <LanguageLoading language={language} />}</>
+  }
+
+  if (path === '/about' || path === '/about-merkato-fund') {
+    return <AboutMerkatoFundPage />
   }
 
   return <SiteDataProvider><div className="site">

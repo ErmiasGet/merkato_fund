@@ -1,4 +1,5 @@
 import { businessStories, faqs, financialTerms, mediaItems, metrics, navigation, principles, processSteps, slides } from './siteContent'
+import { aboutPageContent } from './aboutContent'
 
 export const interfaceText = [
   'Home', 'About Us', 'How It Works', 'The Fund', 'Media Center', 'FAQs', 'Contact', 'Login', 'Get Started', 'Open menu', 'Close menu', 'English', 'Amharic', 'EN', 'አማርኛ',
@@ -15,6 +16,7 @@ export const interfaceText = [
   'Total Transparency', 'Understand the Model', 'Merkato Fund proposes a get-first, then-pay financial model designed to help participants access productive capital. Review the proposed contributions, repayment obligations, and reserve requirements before making a decision.', '30-DAY REPAYMENT ILLUSTRATION', 'Illustrative monthly repayment based on 500 Birr per day for 30 days. The 50 Birr administrative fee and any reserve requirements are separate unless the official agreement states otherwise.', 'Understand the Proposed Reserve', 'The proposed model mentions a 7,500 Birr reserve replenished every 15 days. Before participating, verify how the reserve is calculated, who holds the funds, when it must be replenished, and the conditions for refunds and withdrawals.', 'Verify the Payout and Bank Arrangement', 'The proposal describes a 1 Million Birr payout and a six-month blocked bank account with a claimed 22% interest rate. Confirm the payout eligibility, draw rules, interest calculation, account ownership, applicable fees, and bank guarantees through independently verifiable official documents.', 'Important: These figures describe the proposed model and are not a guarantee of payout, returns, or capital protection. Review the official terms and applicable regulatory approvals before contributing money.',
   'Total Transparency', 'Understand the Model', '30-DAY REPAYMENT ILLUSTRATION', 'Understand the Proposed Reserve', 'Verify the Payout and Bank Arrangement', 'Important: These figures describe the proposed model and are not a guarantee of payout, returns, or capital protection. Review the official terms and applicable regulatory approvals before contributing money.', 'Birr', 'Ethiopian professional in a business setting',
   'Business registration & regulatory details: To be verified', 'Financial Terms', 'Merkato Fund. All rights reserved.', 'Connect an official Merkato Fund YouTube embed URL here when verified.', 'YouTube playback placeholder',
+  'Breadcrumb', 'Read More About Merkato Fund', 'Discover Merkato Fund', 'Loading translation…',
 ] as const
 
 function collectText(value: unknown, output: Set<string>) {
@@ -30,6 +32,6 @@ function collectText(value: unknown, output: Set<string>) {
 }
 
 const sourceSet = new Set<string>(interfaceText)
-collectText({ slides, navigation, faqs, processSteps, financialTerms, businessStories, mediaItems, principles, metrics }, sourceSet)
+collectText({ slides, navigation, faqs, processSteps, financialTerms, businessStories, mediaItems, principles, metrics, aboutPageContent }, sourceSet)
 
 export const allTranslationSources = [...sourceSet]

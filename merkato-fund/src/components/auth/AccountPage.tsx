@@ -9,6 +9,7 @@ type Mode = "login" | "signup" | "forgot" | "reset";
 export default function AccountPage() {
   const { t, registerTexts, prepareTexts } = useLanguage();
   const [mode, setMode] = useState<Mode>(() => {
+    if (window.location.pathname === "/signup") return "signup"
     if (window.location.pathname === "/reset-password") return "reset"
     if (window.location.pathname === "/forgot-password") return "forgot"
     return "login"
